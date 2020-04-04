@@ -55,5 +55,5 @@ xyz2dat::~xyz2dat()
 
 void xyz2dat::fileReadxyz()
 {
-    qDebug() <<" this is file read function";
+    qDebug() <<" this is file read function add to github";
 }
