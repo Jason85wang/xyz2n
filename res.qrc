@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/ico">
+        <file>res/xyz2dat.ico</file>
+        <file>res/logo_xyz.ico</file>
+    </qresource>
+</RCC>

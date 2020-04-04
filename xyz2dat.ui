@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>xyz2dat</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="res.qrc">
+    <normaloff>:/ico/res/xyz2dat.ico</normaloff>:/ico/res/xyz2dat.ico</iconset>
+  </property>
   <widget class="QWidget" name="centralwidget"/>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -27,16 +31,47 @@
     <property name="title">
      <string>xyz2dat</string>
     </property>
-    <addaction name="actionxyz2dat"/>
+    <addaction name="Action_axyz2dat"/>
     <addaction name="actiondat2xyz"/>
     <addaction name="actionorg2xyz"/>
    </widget>
    <addaction name="menuxyz2dat"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <action name="actionxyz2dat">
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <property name="autoFillBackground">
+    <bool>true</bool>
+   </property>
+   <property name="toolButtonStyle">
+    <enum>Qt::ToolButtonTextBesideIcon</enum>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="Action_axyz2dat"/>
+  </widget>
+  <widget class="QDockWidget" name="dockWidget">
+   <attribute name="dockWidgetArea">
+    <number>2</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents"/>
+  </widget>
+  <action name="Action_axyz2dat">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/ico/res/logo_xyz.ico</normaloff>:/ico/res/logo_xyz.ico</iconset>
+   </property>
    <property name="text">
-    <string>xyz2n</string>
+    <string>xyz转dat</string>
+   </property>
+   <property name="toolTip">
+    <string>xyz转dat</string>
    </property>
   </action>
   <action name="actiondat2xyz">
@@ -50,6 +85,8 @@
    </property>
   </action>
  </widget>
- <resources/>
+ <resources>
+  <include location="res.qrc"/>
+ </resources>
  <connections/>
 </ui>

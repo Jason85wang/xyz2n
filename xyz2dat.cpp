@@ -17,6 +17,8 @@ xyz2dat::xyz2dat(QWidget *parent)
     , ui(new Ui::xyz2dat)
 {
     ui->setupUi(this);
+    //设置图片直接在ui编辑器中处理就好
+
     //设置窗口标题
     setWindowTitle("xyz2dat 1.0 wangwangming535@163.com modify:2020.4.1 ");
     //设置窗口固定大小
