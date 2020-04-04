@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>xyz2dat</class>
+ <widget class="QMainWindow" name="xyz2dat">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>xyz2dat</string>
+  </property>
+  <widget class="QWidget" name="centralwidget"/>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuxyz2dat">
+    <property name="title">
+     <string>xyz2dat</string>
+    </property>
+    <addaction name="actionxyz2dat"/>
+    <addaction name="actiondat2xyz"/>
+    <addaction name="actionorg2xyz"/>
+   </widget>
+   <addaction name="menuxyz2dat"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionxyz2dat">
+   <property name="text">
+    <string>xyz2n</string>
+   </property>
+  </action>
+  <action name="actiondat2xyz">
+   <property name="text">
+    <string>dat2xyz</string>
+   </property>
+  </action>
+  <action name="actionorg2xyz">
+   <property name="text">
+    <string>org2xyz</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
