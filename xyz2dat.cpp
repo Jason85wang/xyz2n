@@ -50,7 +50,7 @@ xyz2dat::~xyz2dat()
 {
     delete ui;
     //测试输出结果
-    qDebug() << "主程序退出!";
+    qDebug() << "主程序退出! send to github";
 }
 
 void xyz2dat::fileReadxyz()
