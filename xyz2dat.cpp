@@ -6,6 +6,7 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QFile>
+#include <QTextCodec>
 
 //命名规范
 //类名　首字母大写,单词和单词之间首字母大写
@@ -81,14 +82,14 @@ xyz2dat::~xyz2dat()
 }
 
 /**对取得的文件进行相应的数据处理
- *
+ *此处为数据预处理
  *
  * */
-void xyz2dat::fileReadxyz()
+long xyz2dat::fileReadxyz()
 {
     QByteArray array1;
     double line_number = 0;  //读取的行数
-    QString linedata;
+    QString linedata,tempout;       //每行的内容
     //读取文件并放入控件中
     QFile filein(fname);
     filein.open(QIODevice::ReadOnly);
@@ -98,19 +99,108 @@ void xyz2dat::fileReadxyz()
         //识别与处理数字
         linedata=array1;
 
-        QStringList str_list = linedata.split(QRegExp("\\W+"));
-        for (int i=0; i<str_list.length(); ++i) {
-             ui->textBro_out->append(str_list[i]);
-            ui->textBro_out->append(str_list[i]);
-
+        QStringList str_list = linedata.split(QRegExp("\\s{1,}"));
+//        for (int i=0; i<str_list.length(); ++i) {
+////            ui->textEdit_pre->insertPlainText("line: ");
+////            ui->textEdit_pre->insertPlainText(QString::number(var,10));
+////            ui->textEdit_pre->insertPlainText(" row:");
+////            ui->textEdit_pre->insertPlainText(QString::number(i,10));
+////            ui->textEdit_pre->insertPlainText(" ");
+////            ui->textEdit_pre->insertPlainText(str_list[i]);
+////            ui->textEdit_pre->append(" ");
+////            tempout +=QString::number(i,10)+","+ str_list[i]+",";
+//        }
+        if(var == 0) {
+            //第一行标记与其它不同
+            tempout= QString::number(var+1,10)+",M,"+str_list[0] + "," + str_list[1]+"," + str_list[2];
         }
+        else{
+            tempout= QString::number(var+1,10)+",1,"+str_list[0] + "," + str_list[1]+"," + str_list[2];
+        }
+
+        ui->textEdit_pre->append(tempout);
+        tempout="";
+
         ++line_number;
 //        ui->textEdit_org->insert(array1);
     }
 
     filein.close();
-    qDebug() <<" 打开文件名为:"<<fname;
+    qDebug() <<" fileReadxyz打开文件名为:"<<fname;
+    return line_number;
 }
+
+/**对取得的文件进行相应的数据处理
+ *此处为数据预处理
+ *
+ * */
+long xyz2dat::fileSavedat()
+{
+    QByteArray array1;
+    double line_number = 0;  //读取的行数
+    QString linedata,tempout;       //每行的内容
+
+    //中文编码问题
+//    QTextCodec * codec = QTextCodec::codecForName( "gbk");
+
+    //读取文件并放入控件中
+    QFile filein(fname);
+    filein.open(QIODevice::ReadOnly);
+
+    //写文件相关
+    QFile fileout(fnamesave);
+    fileout.open(QIODevice::WriteOnly);
+
+    while( !filein.atEnd() ){
+        array1 = filein.readLine();
+        ui->textEdit_org->insertPlainText(array1);
+        //识别与处理数字
+        linedata=array1;
+
+        QStringList str_list = linedata.split(QRegExp("\\s{1,}"));
+        if(line_number == 0) {
+            //第一行标记与其它不同
+            tempout= QString::number(int(line_number)+1,10)+",M,"+str_list[0] + "," + str_list[1]+"," + str_list[2]+"\n";
+        }
+        else{
+            tempout= QString::number(int(line_number)+1,10)+",1,"+str_list[0] + "," + str_list[1]+"," + str_list[2]+"\n";
+        }
+
+        //ui->textEdit_pre->append(tempout);
+        fileout.write(tempout.toUtf8().data());
+        tempout="";
+        if( int(line_number)%10000 == 0){
+            tempfilemsg = "已经读写:" +QString::number(line_number) + "个数据";
+            //将文件名显示在状态栏中
+            ui->statusbar->showMessage(tempfilemsg);
+        }
+        ++line_number;
+    }
+
+//    for (int var = 0; var < 100; ++var) {
+
+////        for (int i=0; i<str_list.length(); ++i) {
+//////            ui->textEdit_pre->insertPlainText("line: ");
+//////            ui->textEdit_pre->insertPlainText(QString::number(var,10));
+//////            ui->textEdit_pre->insertPlainText(" row:");
+//////            ui->textEdit_pre->insertPlainText(QString::number(i,10));
+//////            ui->textEdit_pre->insertPlainText(" ");
+//////            ui->textEdit_pre->insertPlainText(str_list[i]);
+//////            ui->textEdit_pre->append(" ");
+//////            tempout +=QString::number(i,10)+","+ str_list[i]+",";
+////        }
+
+////        ui->textEdit_org->insert(array1);
+//    }
+
+    filein.close();
+    fileout.close();
+    qDebug() <<" fileSavedat打开文件名为:"<<fname;
+    tempfilemsg = "已经读写:" +QString::number(line_number) + "个数据";
+    QMessageBox::information(this,"读写文件信息",tempfilemsg);
+    return line_number;
+}
+
 
 /**　处理的第一步,选择文件,并取得文件路径与文件名
 *参数一,文件类型过滤,默认为所有文件
@@ -127,12 +217,39 @@ void xyz2dat::fileOpenx(int type=0)
     default:
         filefilt = tr("all Files (*.*)");
     }
-    fname = QFileDialog::getOpenFileName(this,"打开文件","\\",filefilt );
+    fname = QFileDialog::getOpenFileName(this,"打开文件","D:/QtProjects/xyz2dat/xyz2dat1d2/xyz2dat/testdata/",filefilt );
     //将文件名显示在状态栏中
     ui->statusbar->showMessage(fname);
     //输出调试信息
     qDebug() <<" 打开文件名为:"<<fname;
 }
+
+/**　处理的第3步,选择保存的文件名,并取得文件路径与文件名
+*参数一,文件类型过滤,默认为所有文件
+**/
+void xyz2dat::fileSavex(int type=0)
+{
+    QString filefilt;
+    //文件对话框
+    switch (type) {
+        case 1:
+            //dat格式互转
+            filefilt = tr("south data Files ( *.dat )");
+        break;
+    case 2:
+        //xyz格式互转
+        filefilt = tr("xyz data Files ( *.xyz *.txt)");
+    break;
+    default:
+        filefilt = tr("all Files (*.*)");
+    }
+    fnamesave = QFileDialog::getSaveFileName(this,"打开文件","D:/QtProjects/xyz2dat/xyz2dat1d2/xyz2dat/testdata/",filefilt );
+    //将文件名显示在状态栏中
+    ui->statusbar->showMessage(fnamesave);
+    //输出调试信息
+    qDebug() <<" 保存文件名为:"<<fnamesave;
+}
+
 void xyz2dat::showmodifyinfo(QString info1)
 {
     //模态对话框
@@ -170,7 +287,21 @@ void xyz2dat::showmodifyinfo(QString info1)
 //xyz与dat文件格式转化的主要程序
 void xyz2dat::on_Btn_xyz2dat_clicked()
 {
+
     fileOpenx(1);
     //对数据进行处理
     fileReadxyz();
+    //保存文件名
+    fileSavex(1);
+    //保存数据
+    fileSavedat();
+}
+
+void xyz2dat::on_pushButton_clicked()
+{
+    fileOpenx(1);
+    //保存文件名
+    fileSavex(1);
+    //保存数据
+    fileSavedat();
 }
