@@ -2,6 +2,7 @@
 #include "ui_xyz2dat.h"
 #include <qpushbutton.h>
 #include <qdebug.h>
+#include <QDialog>
 
 //命名规范
 //类名　首字母大写,单词和单词之间首字母大写
@@ -45,7 +46,15 @@ xyz2dat::xyz2dat(QWidget *parent)
         //使用自定函数处理
         fileReadxyz();
     });
+   //XYZ2DAT功能
+    connect(ui->Act_axyz2dat,&QAction::triggered,this,[=](){
+        //模态对话框
+        QDialog dlg(this);
+        dlg.resize(300,100);
+        dlg.exec();
+        qDebug() << "模态对话框　mo tai dialog.";
 
+    });
 }
 
 xyz2dat::~xyz2dat()
@@ -57,5 +66,11 @@ xyz2dat::~xyz2dat()
 
 void xyz2dat::fileReadxyz()
 {
+    //非模态对话框
+    QDialog *dlg2 = new QDialog(this);
+    dlg2->resize(300,200);
+    dlg2->setAttribute(Qt::WA_DeleteOnClose); //55号属性,关闭后释放内存
+    dlg2->show();
+
     qDebug() <<" this is file read function add to github";
 }
