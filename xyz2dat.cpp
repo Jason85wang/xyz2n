@@ -33,7 +33,7 @@ xyz2dat::xyz2dat(QWidget *parent)
     **/
     QPushButton *btn = new QPushButton;
     btn->setParent(this);
-    btn->move(100,10);
+    btn->move(300,300);
     btn->resize(100,50);
     btn->setText("Exit");
     //xyz2dat按钮功能定义
@@ -65,15 +65,10 @@ xyz2dat::xyz2dat(QWidget *parent)
 
         showmodifyinfo(proinfo);
     });
-   //XYZ2DAT功能
+   //XYZ2DAT工具栏的功能定义
     connect(ui->Act_axyz2dat,&QAction::triggered,this,[=](){
-        //模态对话框
-//        QDialog dlg(this);
-//        dlg.resize(300,100);
-//        dlg.exec();
-//        qDebug() << "模态对话框　mo tai dialog.";
         //使用自定函数处理
-        fileReadxyz();
+        fileOpenx(1);
     });
 }
 
@@ -84,16 +79,47 @@ xyz2dat::~xyz2dat()
     qDebug() << "主程序退出! send to github";
 }
 
+//对取得的文件进行相应的数据处理
 void xyz2dat::fileReadxyz()
 {
     //文件对话框
-    QString fname = QFileDialog::getOpenFileName(this,"打开文件","\\",tr("xyz data Files (*.xyz *.dat *.txt)") );
+
+    qDebug() <<" 打开文件名为:"<<fname;
+}
+
+//处理的第一步,选择文件,并取得文件路径与文件名
+//参数一,文件类型过滤,默认为所有文件
+void xyz2dat::fileOpenx(int type=0)
+{
+    QString filefilt;
+    //文件对话框
+    switch (type) {
+        case 1:
+            //xyz与dat格式互转
+            filefilt = tr("xyz data Files (*.xyz *.dat *.txt)");
+    default:
+        filefilt = tr("all Files (*.*)");
+    }
+    fname = QFileDialog::getOpenFileName(this,"打开文件","\\",filefilt );
     //将文件名显示在状态栏中
     ui->statusbar->showMessage(fname);
     qDebug() <<" 打开文件名为:"<<fname;
 }
 void xyz2dat::showmodifyinfo(QString info1)
 {
+    //模态对话框
+//        QDialog dlg(this);
+//        dlg.resize(300,100);
+//        dlg.exec();
+//        qDebug() << "模态对话框　mo tai dialog.";
+    //非模态对话框
+//    QDialog *dlg2 = new QDialog(this);
+//    dlg2->resize(300,200);
+//    dlg2->setAttribute(Qt::WA_DeleteOnClose); //55号属性,关闭后释放内存
+//    dlg2->show();
+
+//    qDebug() <<" this is file read function add to github";
+
     //消息对话框
     //错误
 //     QMessageBox::critical(this,"错误窗口","说明");
@@ -101,6 +127,7 @@ void xyz2dat::showmodifyinfo(QString info1)
 //    QMessageBox::information(this,"info title","info for this ");
     //警告
 //    QMessageBox::warning(this,"警告","下面输出程序修改说明!");
+
     //提问
     if(QMessageBox::Ok == QMessageBox::question(this,"程序修改过程说明",info1,QMessageBox::Cancel|QMessageBox::Ok,QMessageBox::Cancel))
     {
@@ -110,13 +137,10 @@ void xyz2dat::showmodifyinfo(QString info1)
     {
         qDebug() << "选择的是cancel";
     }
+}
 
-
-    //非模态对话框
-//    QDialog *dlg2 = new QDialog(this);
-//    dlg2->resize(300,200);
-//    dlg2->setAttribute(Qt::WA_DeleteOnClose); //55号属性,关闭后释放内存
-//    dlg2->show();
-
-//    qDebug() <<" this is file read function add to github";
+//xyz与dat文件格式转化的主要程序
+void xyz2dat::on_Btn_xyz2dat_clicked()
+{
+    fileOpenx(1);
 }

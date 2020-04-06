@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>477</width>
+    <height>414</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,13 +17,16 @@
    <iconset resource="res.qrc">
     <normaloff>:/ico/res/xyz2dat.ico</normaloff>:/ico/res/xyz2dat.ico</iconset>
   </property>
+  <property name="windowOpacity">
+   <double>0.950000000000000</double>
+  </property>
   <widget class="QWidget" name="centralwidget"/>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>477</width>
      <height>22</height>
     </rect>
    </property>
@@ -57,10 +60,33 @@
    <addaction name="Act_axyz2dat"/>
   </widget>
   <widget class="QDockWidget" name="dockWidget">
+   <property name="layoutDirection">
+    <enum>Qt::LeftToRight</enum>
+   </property>
+   <property name="windowTitle">
+    <string>功能一览表</string>
+   </property>
    <attribute name="dockWidgetArea">
-    <number>2</number>
+    <number>1</number>
    </attribute>
-   <widget class="QWidget" name="dockWidgetContents"/>
+   <widget class="QWidget" name="dockWidgetContents">
+    <layout class="QFormLayout" name="formLayout">
+     <item row="0" column="1">
+      <widget class="QPushButton" name="Btn_xyz2dat">
+       <property name="text">
+        <string>xyz与dat格式互相转化</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QPushButton" name="Btn_xyzAdd">
+       <property name="text">
+        <string>PushButton</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
   </widget>
   <action name="Act_axyz2dat">
    <property name="icon">
