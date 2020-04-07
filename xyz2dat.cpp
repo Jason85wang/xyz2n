@@ -160,22 +160,26 @@ long xyz2dat::fileSavedat()
         QStringList str_list = linedata.split(QRegExp("\\s{1,}"));
         if(line_number == 0) {
             //第一行标记与其它不同
-            tempout= QString::number(int(line_number)+1,10)+",M,"+str_list[0] + "," + str_list[1]+"," + str_list[2]+"\n";
+            tempout += QString::number(int(line_number)+1,10)+",M,"+str_list[0] + "," + str_list[1]+"," + str_list[2]+"\n";
         }
         else{
-            tempout= QString::number(int(line_number)+1,10)+",1,"+str_list[0] + "," + str_list[1]+"," + str_list[2]+"\n";
+            tempout += QString::number(int(line_number)+1,10)+",1,"+str_list[0] + "," + str_list[1]+"," + str_list[2]+"\n";
         }
 
-        //ui->textEdit_pre->append(tempout);
-        fileout.write(tempout.toUtf8().data());
-        tempout="";
         if( int(line_number)%10000 == 0){
+            //ui->textEdit_pre->append(tempout);
+            fileout.write(tempout.toUtf8().data());
+            tempout="";
             tempfilemsg = "已经读写:" +QString::number(line_number) + "个数据";
             //将文件名显示在状态栏中
             ui->statusbar->showMessage(tempfilemsg);
+            qDebug() << tempfilemsg;
         }
         ++line_number;
     }
+    //写入剩下的部分
+    fileout.write(tempout.toUtf8().data());
+    tempout="";
 
 //    for (int var = 0; var < 100; ++var) {
 
@@ -291,10 +295,6 @@ void xyz2dat::on_Btn_xyz2dat_clicked()
     fileOpenx(1);
     //对数据进行处理
     fileReadxyz();
-    //保存文件名
-    fileSavex(1);
-    //保存数据
-    fileSavedat();
 }
 
 void xyz2dat::on_pushButton_clicked()
