@@ -1,3 +1,5 @@
+2020.5.8 在虚拟机安装Qt
+
 2019.4.4 学习程序打包方法,发布方法
 1.打包关键词　windeployqt Enigma Virtual Box
 运行成功后，如果勾选了 “shadow build” 将源码路径和构建路径分开，那么将在 build-cleanRobot-Desktop_Qt_5_9_7_MinGW_32bit-Release 文件夹下生成 exe 文件，
