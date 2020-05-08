@@ -31,7 +31,7 @@ xyz2dat::xyz2dat(QWidget *parent)
     //增加xyz2dat按钮功能
     /**
     第一个自定义按钮功能(测试用)
-    关闭程序
+    关闭程序test
     **/
 //    QPushButton *btn = new QPushButton;
 //    btn->setParent(this);
