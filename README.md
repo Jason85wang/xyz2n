@@ -1,4 +1,5 @@
 2020.5.8 在虚拟机安装Qt
+参考：https://blog.csdn.net/sheng_Mu555/article/details/82838483
 
 2019.4.4 学习程序打包方法,发布方法
 1.打包关键词　windeployqt Enigma Virtual Box
