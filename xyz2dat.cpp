@@ -8,6 +8,9 @@
 #include <QFile>
 #include <QTextCodec>
 
+//jason
+#include <QJsonObject>
+#include <QJsonDocument>
 //命名规范
 //类名　首字母大写,单词和单词之间首字母大写
 //函数名称　变量名称　首字母小写,单词和单词之间首字母大写
@@ -72,13 +75,24 @@ xyz2dat::xyz2dat(QWidget *parent)
         //使用自定函数处理
         fileOpenx(1);
     });
+
+    //网络接口定义
+    /*
+    wangnam = new QNetworkAccessManager(this);
+    QObject::connect(wangnam, SIGNAL(finished(QNetworkReply*)),
+             this, SLOT(finishedSlot(QNetworkReply*)));*/
+    m_accessManager  = new QNetworkAccessManager(this);
+    QMetaObject::Connection connRet = QObject::connect(m_accessManager , SIGNAL(finished(QNetworkReply*)), this, SLOT(requestFinished(QNetworkReply*)));
+
 }
 
 xyz2dat::~xyz2dat()
 {
     delete ui;
+    delete m_accessManager;
     //测试输出结果
     qDebug() << "主程序退出! send to github";
+
 }
 
 /**对取得的文件进行相应的数据处理
@@ -163,6 +177,7 @@ long xyz2dat::fileSavedat()
             tempout += QString::number(int(line_number)+1,10)+",M,"+str_list[0] + "," + str_list[1]+"," + str_list[2]+"\n";
         }
         else{
+//            str_list[i].toFloat();  //将内容转为数字
             tempout += QString::number(int(line_number)+1,10)+",1,"+str_list[0] + "," + str_list[1]+"," + str_list[2]+"\n";
         }
 
@@ -304,4 +319,152 @@ void xyz2dat::on_pushButton_clicked()
     fileSavex(1);
     //保存数据
     fileSavedat();
+}
+
+//登陆内网服务器，使用指定的测试用户名与密码
+void xyz2dat::on_pushB_getinfo_login_clicked()
+{
+    //GET function
+    QNetworkRequest request;
+    request.setUrl(QUrl("http://10.10.60.71:7010/login?loginName=ghj&password=gh123abC_"));
+    QNetworkReply* reply = m_accessManager->get(request);
+
+    // NOTE: Store QNetworkReply pointer (maybe into caller).
+    // When this HTTP request is finished you will receive this same
+    // QNetworkReply as response parameter.
+    // By the QNetworkReply pointer you can identify request and response.
+
+//————————————————
+//版权声明：本文为CSDN博主「chenlong12580」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
+//原文链接：https://blog.csdn.net/chenlong12580/java/article/details/7392766
+}
+
+void xyz2dat::requestFinished(QNetworkReply* reply) {
+    if (reply->error() == QNetworkReply::NoError)
+    {
+        QByteArray bytes = reply->readAll();
+        qDebug()<<bytes;
+//        //将读取到的内容显示在广本框中
+//        QString string = QString::fromUtf8(bytes);
+//        ui->plainTextEdit->setPlainText(string.toUtf8());
+        //解析jason代码并将结果显示在文本框中
+        // Parse document
+        QJsonDocument doc(QJsonDocument::fromJson(bytes));
+
+        // Get JSON object
+        QJsonObject json = doc.object();
+
+        // Access properties
+        if(!json["token"].toString().isEmpty()) {
+               qDebug() << json["token"].toString();
+               token =  json["token"].toString();
+               ui->plainTextEdit->setPlainText("Token is:"+token);
+        }
+
+        //show the ship names
+        if(json["id"].toString().isEmpty())
+            ui->plainTextEdit->setPlainText(bytes);
+    }
+    else
+    {
+        qDebug()<<"handle errors here";
+        QVariant statusCodeV = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
+        //statusCodeV是HTTP服务器的相应码，reply->error()是Qt定义的错误码，可以参考QT的文档
+        qDebug( "found error ....code: %d %d\n", statusCodeV.toInt(), (int)reply->error());
+       // qDebug(qPrintable(reply->errorString()));
+    }
+    reply->deleteLater();
+//————————————————
+//版权声明：本文为CSDN博主「阳光柠檬_」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
+//原文链接：https://blog.csdn.net/liukang325/java/article/details/46915359
+}
+
+void xyz2dat::on_pushButton_2_clicked()
+{
+    //POST
+        QNetworkRequest request;
+
+        request.setUrl(QUrl("http://localhost:8888/login"));
+    //    request.setHeader(QNetworkRequest::ContentTypeHeader,"application/x-www-form-urlencoded");
+    //    request.setRawHeader("Accept","text/html, application/xhtml+xml, */*");
+    //    request.setRawHeader("Referer","http://localhost:8888/login");
+    //    request.setRawHeader("Accept-Language","zh-CN");
+    //    request.setRawHeader("X-Requested-With","XMLHttpRequest");
+    //    request.setRawHeader("User-Agent","Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0)");
+    //    request.setRawHeader("Content-Type","application/x-www-form-urlencoded");
+    //    request.setRawHeader("Accept-Encoding","gzip,deflate");
+    //    request.setRawHeader("Host","localhost:8888");
+    //    request.setRawHeader("Content-Length","18");
+    //    request.setRawHeader("Connection","Keep-Alive");
+    //    request.setRawHeader("Cache-Control","no-cache");
+
+        QByteArray postData;
+        postData.append("myname=lk&mypwd=33");
+
+        QNetworkReply* reply = m_accessManager->post(request,postData);
+//    ————————————————
+//    版权声明：本文为CSDN博主「阳光柠檬_」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
+//    原文链接：https://blog.csdn.net/liukang325/java/article/details/46915359v
+}
+
+void xyz2dat::on_pushB_getinfo_clicked()
+{
+    //显示船舶编号详情
+    //GET function
+    QNetworkRequest request;
+//    request.setUrl(QUrl("http://10.10.60.71:7010/login?loginName=ghj&password=gh123abC_"));
+    request.setUrl(QUrl("http://10.10.60.71:7010/bd/searchShipInfos"));
+    request.setHeader(QNetworkRequest::UserAgentHeader, "my-app/0.0.1");
+    //set token to login将token加入信息头文件
+    auto header = QString("%1").arg(token);
+    request.setRawHeader(QByteArray("token"), header.toUtf8());
+
+    QNetworkReply* reply = m_accessManager->get(request);
+
+    // NOTE: Store QNetworkReply pointer (maybe into caller).
+    // When this HTTP request is finished you will receive this same
+    // QNetworkReply as response parameter.
+    // By the QNetworkReply pointer you can identify request and response.
+
+}
+
+void xyz2dat::on_actionview1_readfile_triggered()
+{
+    //切换界面显示
+    ui->stackedWidget->setCurrentIndex(0);
+}
+
+void xyz2dat::on_actionview2_readnet_triggered()
+{
+    //切换界面显示
+    ui->stackedWidget->setCurrentIndex(1);
+}
+
+void xyz2dat::on_pushB_getinfo_2_clicked()
+{
+    //显示信号点详情
+    //GET function
+    QNetworkRequest request;
+    request.setUrl(QUrl("http://10.10.60.71:7010/bd/searchPointInfos"));
+    request.setHeader(QNetworkRequest::UserAgentHeader, "my-app/0.0.1");
+    //set token to login将token加入信息头文件
+    auto header = QString("%1").arg(token);
+    request.setRawHeader(QByteArray("token"), header.toUtf8());
+
+    QNetworkReply* reply = m_accessManager->get(request);
+}
+
+void xyz2dat::on_pushB_getinfo_3_clicked()
+{
+    //显示信号详情（按指定日期，指定船舶显示）
+    //GET function
+    QNetworkRequest request;
+    request.setUrl(QUrl("http://10.10.60.71:7010/data/searchData?endDate=2020-07-01 01:01&shipId=2001&startDate=2020-07-01 00:01"));
+    request.setHeader(QNetworkRequest::UserAgentHeader, "my-app/0.0.1");
+
+    //set token to login将token加入信息头文件
+    auto header = QString("%1").arg(token);
+    request.setRawHeader(QByteArray("token"), header.toUtf8());
+
+    QNetworkReply* reply = m_accessManager->get(request);
 }

@@ -26,6 +26,12 @@
      <layout class="QFormLayout" name="formLayout_3">
       <item row="0" column="0" colspan="2">
        <widget class="QStackedWidget" name="stackedWidget">
+        <property name="cursor">
+         <cursorShape>SizeHorCursor</cursorShape>
+        </property>
+        <property name="currentIndex">
+         <number>1</number>
+        </property>
         <widget class="QWidget" name="page">
          <layout class="QFormLayout" name="formLayout_2">
           <item row="0" column="0">
@@ -50,7 +56,169 @@
           </item>
          </layout>
         </widget>
-        <widget class="QWidget" name="page_2"/>
+        <widget class="QWidget" name="page_2">
+         <widget class="QPushButton" name="pushB_getinfo">
+          <property name="geometry">
+           <rect>
+            <x>100</x>
+            <y>20</y>
+            <width>81</width>
+            <height>23</height>
+           </rect>
+          </property>
+          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
+          <property name="text">
+           <string>查船舶编号</string>
+          </property>
+         </widget>
+         <widget class="QLabel" name="label_3">
+          <property name="geometry">
+           <rect>
+            <x>200</x>
+            <y>10</y>
+            <width>54</width>
+            <height>12</height>
+           </rect>
+          </property>
+          <property name="cursor">
+           <cursorShape>SizeHorCursor</cursorShape>
+          </property>
+          <property name="text">
+           <string>开始时间</string>
+          </property>
+         </widget>
+         <widget class="QPlainTextEdit" name="plainTextEdit">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>90</y>
+            <width>611</width>
+            <height>161</height>
+           </rect>
+          </property>
+         </widget>
+         <widget class="QPushButton" name="pushB_getinfo_login">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>20</y>
+            <width>81</width>
+            <height>23</height>
+           </rect>
+          </property>
+          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
+          <property name="text">
+           <string>login</string>
+          </property>
+         </widget>
+         <widget class="QPushButton" name="pushB_getinfo_2">
+          <property name="geometry">
+           <rect>
+            <x>100</x>
+            <y>50</y>
+            <width>81</width>
+            <height>23</height>
+           </rect>
+          </property>
+          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
+          <property name="text">
+           <string>查信号点详情</string>
+          </property>
+         </widget>
+         <widget class="QDateTimeEdit" name="dateTimeEdit_Start">
+          <property name="geometry">
+           <rect>
+            <x>260</x>
+            <y>0</y>
+            <width>194</width>
+            <height>22</height>
+           </rect>
+          </property>
+         </widget>
+         <widget class="QLabel" name="label_4">
+          <property name="geometry">
+           <rect>
+            <x>200</x>
+            <y>40</y>
+            <width>54</width>
+            <height>12</height>
+           </rect>
+          </property>
+          <property name="cursor">
+           <cursorShape>SizeHorCursor</cursorShape>
+          </property>
+          <property name="text">
+           <string>开始时间</string>
+          </property>
+         </widget>
+         <widget class="QLabel" name="label_5">
+          <property name="geometry">
+           <rect>
+            <x>200</x>
+            <y>60</y>
+            <width>54</width>
+            <height>12</height>
+           </rect>
+          </property>
+          <property name="cursor">
+           <cursorShape>SizeHorCursor</cursorShape>
+          </property>
+          <property name="text">
+           <string>船舶</string>
+          </property>
+         </widget>
+         <widget class="QDateTimeEdit" name="dateTimeEdit_End">
+          <property name="geometry">
+           <rect>
+            <x>260</x>
+            <y>30</y>
+            <width>194</width>
+            <height>22</height>
+           </rect>
+          </property>
+         </widget>
+         <widget class="QComboBox" name="comboBox">
+          <property name="geometry">
+           <rect>
+            <x>260</x>
+            <y>60</y>
+            <width>69</width>
+            <height>22</height>
+           </rect>
+          </property>
+          <property name="currentText">
+           <string/>
+          </property>
+          <property name="currentIndex">
+           <number>-1</number>
+          </property>
+          <property name="modelColumn">
+           <number>3</number>
+          </property>
+         </widget>
+         <widget class="QPushButton" name="pushB_getinfo_3">
+          <property name="geometry">
+           <rect>
+            <x>380</x>
+            <y>60</y>
+            <width>211</width>
+            <height>23</height>
+           </rect>
+          </property>
+          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
+          <property name="text">
+           <string>查指定船舶指定时间段详细数据详情</string>
+          </property>
+         </widget>
+        </widget>
        </widget>
       </item>
       <item row="1" column="1">
@@ -81,7 +249,15 @@
     <addaction name="Act_dat2xyz"/>
     <addaction name="Act_org2xyz"/>
    </widget>
+   <widget class="QMenu" name="menuview">
+    <property name="title">
+     <string>view</string>
+    </property>
+    <addaction name="actionview1_readfile"/>
+    <addaction name="actionview2_readnet"/>
+   </widget>
    <addaction name="menuxyz2dat"/>
+   <addaction name="menuview"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QToolBar" name="toolBar">
@@ -151,6 +327,16 @@
   <action name="Act_org2xyz">
    <property name="text">
     <string>org2xyz</string>
+   </property>
+  </action>
+  <action name="actionview1_readfile">
+   <property name="text">
+    <string>view1_readfile</string>
+   </property>
+  </action>
+  <action name="actionview2_readnet">
+   <property name="text">
+    <string>view2_readnet</string>
    </property>
   </action>
  </widget>
